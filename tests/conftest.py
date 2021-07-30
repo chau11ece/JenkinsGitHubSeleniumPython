@@ -28,14 +28,14 @@ def setup(request):
     if browser == "firefox":
         option = webdriver.FirefoxOptions()
         if request.config.getoption("--headless"):
-            option.add_argument('headless')
+            option.headless = True
         driver = webdriver.Firefox(executable_path="D:\\WebDriver\\geckodriver.exe", options=option)
     elif browser == "chrome":
         option = webdriver.ChromeOptions()
         chromedriver = "D:\\WebDriver\\chromedriver.exe"
         os.environ["webdriver.chrome.driver"] = chromedriver
         if request.config.getoption("--headless"):
-            option.add_argument('headless')
+            option.headless = True
         driver = webdriver.Chrome(executable_path="D:\\WebDriver\\chromedriver.exe", options=option)
     elif browser == "IE":
         driver = webdriver.Ie("D:\\WebDriver\\msedgedriver.exe")
