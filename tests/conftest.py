@@ -13,7 +13,10 @@ driver = None
 # add cmd line option and provide the cmdopt through a fixture function:
 def pytest_addoption(parser):
     parser.addoption(
-        "--browser", action="store", default="firefox", help="my option: type1 or type2"
+        "--browser", action="store", default="firefox", help="select different types browsers"
+    )
+    parser.addoption(
+        "--headless", action="store_true", help="enable headless mode for supported browsers"
     )
 
 
@@ -23,11 +26,17 @@ def setup(request):
     browser = request.config.getoption("--browser")
     base_url = "https://rahulshettyacademy.com/angularpractice/"
     if browser == "firefox":
-        driver = webdriver.Firefox(executable_path="D:\\WebDriver\\geckodriver.exe")
+        option = webdriver.FirefoxOptions()
+        if request.config.getoption("--headless"):
+            option.add_argument('headless')
+        driver = webdriver.Firefox(executable_path="D:\\WebDriver\\geckodriver.exe", options=option)
     elif browser == "chrome":
+        option = webdriver.ChromeOptions()
         chromedriver = "D:\\WebDriver\\chromedriver.exe"
         os.environ["webdriver.chrome.driver"] = chromedriver
-        driver = webdriver.Chrome(chromedriver)
+        if request.config.getoption("--headless"):
+            option.add_argument('headless')
+        driver = webdriver.Chrome(executable_path="D:\\WebDriver\\chromedriver.exe", options=option)
     elif browser == "IE":
         driver = webdriver.Ie("D:\\WebDriver\\msedgedriver.exe")
     else:
